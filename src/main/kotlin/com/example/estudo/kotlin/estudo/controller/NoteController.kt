@@ -39,5 +39,10 @@ class NoteController {
         return service.updateNote(note)
     }
 
+    @PostMapping("/by_title")
+    fun getTodosLaterThan(@RequestBody payload: NoteFindByTitleRequest) : Iterable<NoteDTO> {
+        return service.findByTitle(payload.title)
+    }
+
 
 }

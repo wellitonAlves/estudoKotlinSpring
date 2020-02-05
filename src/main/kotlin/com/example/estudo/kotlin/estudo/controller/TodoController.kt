@@ -37,6 +37,9 @@ class TodoController {
     fun updateTodo(@RequestBody todo:TodoDTO) : TodoDTO {
         return service.updateTodo(todo)
     }
+    @PostMapping("/later_than")
+    fun getTodosLaterThan(@RequestBody payload: TodoLaterThanRequest):
+            Iterable<TodoDTO> = service.getScheduledLaterThan(payload.date)
 
 
 }

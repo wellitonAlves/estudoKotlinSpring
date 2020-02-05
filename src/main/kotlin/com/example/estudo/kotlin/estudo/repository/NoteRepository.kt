@@ -6,4 +6,8 @@ import org.springframework.data.repository.CrudRepository
 
 
 @Repository
-interface NoteRepository : CrudRepository<Note, String>
+interface NoteRepository : CrudRepository<Note, String>{
+     fun findByTitle(title: String): Iterable<Note>
+
+
+}

@@ -5,14 +5,15 @@ import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.UpdateTimestamp
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 
 @Entity
 @Table(name = "note")
+@NamedQuery(
+        name = "Note.findByTitle",
+        query = "SELECT n FROM Note n WHERE n.title LIKE ?1"
+)
 data class Note (
         @Id
         @GeneratedValue(generator = "uuid2")
