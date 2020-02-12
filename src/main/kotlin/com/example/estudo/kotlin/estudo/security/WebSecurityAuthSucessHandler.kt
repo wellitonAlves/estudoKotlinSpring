@@ -4,10 +4,13 @@ package com.example.estudo.kotlin.estudo.security
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache
+import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+
+@Component
 class WebSecurityAuthSucessHandler: SimpleUrlAuthenticationSuccessHandler() {
 
     var requestCache = HttpSessionRequestCache()

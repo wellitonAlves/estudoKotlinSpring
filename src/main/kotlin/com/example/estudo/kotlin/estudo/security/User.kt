@@ -18,75 +18,71 @@ import javax.validation.constraints.NotBlank
 @Table(name = "user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 open class User(
+        @Id
+        @GeneratedValue(generator = "uuid2")
+        @GenericGenerator(name = "uuid2", strategy = "uuid2")
+        @Column(columnDefinition = "varchar(36)")
+        var id: String = "",
 
-    @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    var id: String = "",
+        @Column(unique = true, nullable = false)
+        @NotNull
+        @Email
+        var email: String = "",
 
-    @Column(unique = true, nullable = false)
-    @NotNull
-    @Email
-    var email: String = "",
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        @NotBlank
+        var pwd: String = "",
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
-    var pwd: String = "",
+        @NotBlank
+        var firstName: String = "",
 
-    @NotBlank
-    var firstName: String = "",
+        @NotBlank
+        var lastName: String = "",
 
-    @NotBlank
-    var lastName: String = "",
+        var roles: String = "",
+        var enabled: Boolean = true,
+        var accountNonExpired: Boolean = true,
+        var accountNonLocked: Boolean = true,
+        var credentialsNonExpired: Boolean = true,
 
-    var roles: String = "",
+        @CreationTimestamp
+        var created: Date = Date(),
 
-    var enabled: Boolean = true,
-    var accountNonExpired: Boolean = true,
-    var accountNonLocked: Boolean =  true,
-    var credetialNonExpired: Boolean =  true,
+        @UpdateTimestamp
+        var modified: Date = Date()
+) : UserDetails {
 
-    @CreationTimestamp
-    var created: Date = Date(),
-
-    @UpdateTimestamp
-    var modified: Date = Date()
-        ): UserDetails {
-
-    constructor(): this("","","","","","",
-            true,true,true,true,Date(),Date())
+    /**
+     * We need empty constructor for SecurityInitializationTest and Hibernate.
+     */
+    constructor() : this(
+            "", "", "", "", "", "", true, true, true, true, Date(), Date()
+    )
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        val authority = mutableListOf<GrantedAuthority>()
+        val authorities = mutableListOf<GrantedAuthority>()
         roles
                 .split(",")
-                .forEach{it -> authorities.add(SimpleGrantedAuthority(it.trim()) as Nothing)}
+                .forEach { it ->
+                    authorities.add(
+                            SimpleGrantedAuthority(
+                                    it.trim()
+                            )
+                    )
+                }
         return authorities
     }
 
-    override fun isEnabled(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isEnabled() = enabled
 
-    override fun getUsername(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getUsername() = email
 
-    override fun isCredentialsNonExpired(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isCredentialsNonExpired() = credentialsNonExpired
 
-    override fun getPassword(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getPassword() = pwd
 
-    override fun isAccountNonExpired(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isAccountNonExpired() = accountNonExpired
 
-    override fun isAccountNonLocked(): Boolean {
-        TODO("Not yet implemented")
-    }
-
+    override fun isAccountNonLocked() = accountNonLocked
 
 }

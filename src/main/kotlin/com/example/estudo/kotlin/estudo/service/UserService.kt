@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-class UserService: UserDetailsService {
+class UserService : UserDetailsService {
 
     @Autowired
     lateinit var repository: UserRepository
@@ -34,46 +34,47 @@ class UserService: UserDetailsService {
         return repository.save(member)
     }
 
-    fun saveAdmin(user: UserDTO):User{
+    fun saveAdmin(user: UserDTO): User {
         val admin = Admin()
         admin.email = user.email
         admin.firstName = user.firstName
         admin.lastName = user.lastName
+        admin.roles = "ADMIN, MEMBER"
         admin.pwd = encoder.encode(user.password)
-        admin.roles = "MEMBER"
         return repository.save(admin)
     }
 
-    fun updateUser(toSave: User): User?{
+    fun updateUser(toSave: User): User? {
         val user = repository.findOneByEmail(toSave.email)
-            user?.let {
-                if(!toSave.pwd.isEmpty()){
-                    user.pwd = encoder.encode(toSave.password)
-                }
-                user.firstName = toSave.firstName
-                user.lastName = toSave.lastName
-                user.accountNonExpired = toSave.accountNonExpired
-                user.accountNonLocked = toSave.accountNonLocked
-                user.credetialNonExpired = toSave.credetialNonExpired
-                user.modified = Date()
-                return repository.save(user)
+        user?.let {
+            if (!toSave.pwd.isEmpty()) {
+                user.pwd = encoder.encode(toSave.password)
             }
+            user.firstName = toSave.firstName
+            user.lastName = toSave.lastName
+            user.accountNonExpired = toSave.accountNonExpired
+            user.accountNonLocked = toSave.accountNonLocked
+            user.credentialsNonExpired = toSave.credentialsNonExpired
+            user.modified = Date()
+            return repository.save(user)
+        }
         return null
     }
 
-    fun getUsers() = repository.findAll().map {
-        it -> UserDetailsDTO(
-            it.id,
-            it.email,
-            it.firstName,
-            it.lastName,
-            it.roles,
-            it.enabled,
-            it.accountNonExpired,
-            it.accountNonLocked,
-            it.credetialNonExpired,
-            it.created,
-            it.modified )
+    fun getUsers() = repository.findAll().map { it ->
+        UserDetailsDTO(
+                it.id,
+                it.email,
+                it.firstName,
+                it.lastName,
+                it.roles,
+                it.enabled,
+                it.accountNonExpired,
+                it.accountNonLocked,
+                it.credentialsNonExpired,
+                it.created,
+                it.modified
+        )
     }
 
     fun deleteUser(id: String) = repository.deleteById(id)
