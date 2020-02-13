@@ -38,6 +38,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Autowired
     lateinit var successHandler: WebSecurityAuthSucessHandler
 
+
     @Autowired
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(authenticationProvider())

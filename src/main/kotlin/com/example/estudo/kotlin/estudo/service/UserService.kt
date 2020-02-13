@@ -61,7 +61,26 @@ class UserService : UserDetailsService {
         return null
     }
 
-    fun getUsers() = repository.findAll().map { it ->
+    fun getUsers(): List<UserDetailsDTO>{
+
+        println("teste1")
+        return repository.findAll().map { it ->
+            UserDetailsDTO(
+                    it.id,
+                    it.email,
+                    it.firstName,
+                    it.lastName,
+                    it.roles,
+                    it.enabled,
+                    it.accountNonExpired,
+                    it.accountNonLocked,
+                    it.credentialsNonExpired,
+                    it.created,
+                    it.modified
+            )}
+    }
+
+   /* fun getUsers() = repository.findAll().map { it ->
         UserDetailsDTO(
                 it.id,
                 it.email,
@@ -75,7 +94,7 @@ class UserService : UserDetailsService {
                 it.created,
                 it.modified
         )
-    }
+    }*/
 
     fun deleteUser(id: String) = repository.deleteById(id)
 
